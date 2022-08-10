@@ -3,38 +3,27 @@ package com.paymybuddy.paymybuddy.models;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor
 public class Utilisateur {
     @Id
-    @Column(nullable = false)
-    @JoinColumn(name ="id_utilisateur")
-    private int idUtilisateur;
+    @Column(name = "id_utilisateur")
+    private Integer idUtilisateur;
+
     private String nom;
     private String prenom;
     private String adresseEmail;
     private Date dateDeNaissance;
     private double fondsDisponibles;
 
-    @ManyToOne
-    @JoinTable(
-        name = "transactions",
-        joinColumns = { @JoinColumn(name="destinataire"),
-                        @JoinColumn(name="emetteur"),
-                        @JoinColumn(name = "date")}
-    )
+    @OneToMany(mappedBy = "embeddedTransaction.emetteur")
+    private List<Transaction> transactions;
 
-    private Transaction transaction;
 
-    @ManyToMany
-    @JoinTable(
-        name = "connexions",
-        joinColumns = @JoinColumn(name = "demandeur"),
-            inverseJoinColumns = @JoinColumn(name="receveur"))
-    Set<Connexion>ConnexionSet;
+    @OneToMany(mappedBy = "embeddedConnexion.demandeur")
+    Set<Connexion>ConnexionSet = new HashSet<>();
 
     public int getIdUtilisateur() {
         return idUtilisateur;
