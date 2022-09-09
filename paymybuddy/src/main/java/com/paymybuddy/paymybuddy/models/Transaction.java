@@ -1,32 +1,36 @@
 package com.paymybuddy.paymybuddy.models;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Table;
 
+@Component
 @Entity
+@Table(name = "transactions")
 @NoArgsConstructor
-public class Transaction {
-    @Id
-    private Date date;
-    @Id
-    private int destinataire;
-    @Id
-    private int emetteur;
+@Getter
+@Setter
+public class Transaction{
+
+    @EmbeddedId
+    private EmbeddedTransaction embeddedTransaction;
+
+
     private String description;
-    private int montant;
+    private Integer montant;
 
 
-    @OneToMany(targetEntity = Utilisateur.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = false)
-    private List<Utilisateur> transfers;
 
-    public Transaction(String description, int montant, int destinataire, int emetteur, Date date) {
+    public Transaction(String description, int montant) {
         this.description = description;
         this.montant = montant;
-        this.destinataire = destinataire;
-        this.emetteur = emetteur;
-        this.date = date;
+
+        this.embeddedTransaction = new EmbeddedTransaction(embeddedTransaction.getDate(),embeddedTransaction.getEmetteur(),embeddedTransaction.getDestinataire());
     }
 }

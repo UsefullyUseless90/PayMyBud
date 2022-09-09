@@ -1,23 +1,24 @@
 package com.paymybuddy.paymybuddy.models;
 
-import javax.persistence.*;
-import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
 
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Component
 @Entity
-@Table(name = "Connexion")
+@Table(name = "connexions")
+@Setter
+@Getter
 public class Connexion {
 
-    @Id
-    private int receveur;
-    @Id
-    private int demandeur;
-
-    @ManyToMany(mappedBy = "ConnexionSet")
-    Set<Utilisateur>MiseEnRelation;
-
+    @EmbeddedId
+    private EmbeddedConnexion embeddedConnexion;
 
     public Connexion() {
-        this.receveur = receveur;
-        this.demandeur = demandeur;
+        this.embeddedConnexion = new EmbeddedConnexion();
     }
 }
