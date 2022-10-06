@@ -1,11 +1,10 @@
 package com.paymybuddy.paymybuddy.services;
 
-import com.paymybuddy.paymybuddy.models.Utilisateur;
+import com.paymybuddy.paymybuddy.models.dao.UtilisateurDAO;
 import com.paymybuddy.paymybuddy.repositories.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -15,26 +14,26 @@ public class UtilisateurService implements IUtilisateurService {
     @Autowired
     UtilisateurRepository utilisateurRepository;
     @Autowired
-    Utilisateur utilisateur;
+    UtilisateurDAO utilisateurDAO;
 
-    public Iterable<Utilisateur> getTousLesUtilisateurs() {
-    Iterable<Utilisateur> utilisateurs = utilisateurRepository.findAll();
+    public Iterable<UtilisateurDAO> getTousLesUtilisateurs() {
+    Iterable<UtilisateurDAO> utilisateurs = utilisateurRepository.findAll();
     return utilisateurs;
     }
 
-    public Optional<Utilisateur> getUtilisateurId() {
-        Optional<Utilisateur> id = utilisateurRepository.findById(utilisateur.getIdUtilisateur());
+    public Optional<UtilisateurDAO> getUtilisateurId() {
+        Optional<UtilisateurDAO> id = utilisateurRepository.findById(utilisateurDAO.getIdUtilisateur());
         return id;
     }
 
-    public Utilisateur saveUtilisateur(Utilisateur utilisateur){
-        utilisateur.setIdUtilisateur(new Random().nextInt());
-        utilisateur.setNom(utilisateur.getNom());
-        utilisateur.setPrenom(utilisateur.getPrenom());
-        utilisateur.setAdresseEmail(utilisateur.getAdresseEmail());
-        utilisateur.setDateDeNaissance(utilisateur.getDateDeNaissance());
-        utilisateur = utilisateurRepository.save(utilisateur);
-        return utilisateur;
+    public UtilisateurDAO saveUtilisateur(UtilisateurDAO utilisateurDAO){
+        utilisateurDAO.setIdUtilisateur(new Random().nextInt());
+        utilisateurDAO.setNom(utilisateurDAO.getNom());
+        utilisateurDAO.setPrenom(utilisateurDAO.getPrenom());
+        utilisateurDAO.setAdresseEmail(utilisateurDAO.getAdresseEmail());
+        utilisateurDAO.setDateDeNaissance(utilisateurDAO.getDateDeNaissance());
+        utilisateurDAO = utilisateurRepository.save(utilisateurDAO);
+        return utilisateurDAO;
     }
    /* List<Utilisateur> utilisateurMaj(Utilisateur utilisateur){
         // Creates a list and add to it the persons

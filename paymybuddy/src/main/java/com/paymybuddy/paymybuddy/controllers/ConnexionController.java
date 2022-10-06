@@ -1,36 +1,43 @@
 package com.paymybuddy.paymybuddy.controllers;
 
-import com.paymybuddy.paymybuddy.models.Connexion;
+import com.paymybuddy.paymybuddy.models.dto.ConnexionDTO;
+import com.paymybuddy.paymybuddy.models.dto.TransactionDTO;
+import com.paymybuddy.paymybuddy.models.dto.UtilisateurDTO;
 import com.paymybuddy.paymybuddy.services.IConnexionService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.io.IOException;
+import java.util.List;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/connexions")
 public class ConnexionController {
 
+    private static final Logger log = LogManager.getLogger(TransactionController.class);
+
     @Autowired
     IConnexionService iConnexionService;
 
-    @GetMapping
-    @RequestMapping("/connexions")
-    public Iterable<Connexion>getConnexions() {
-        Iterable<Connexion> connexions = iConnexionService.getConnexions();
-        return connexions;
+    @RequestMapping("/{id}")
+    public List<UtilisateurDTO> getRelation(@PathVariable("id") Integer idUtilisateur) {
+        return iConnexionService.getConnexionById(idUtilisateur);
     }
+    @PostMapping("/nouvelleConnexion")
+    public ResponseEntity<?> creationConnexion(@RequestBody ConnexionDTO connexionDTO) throws IOException, JSONException {
+        log.info("Création d'une nouvelle transaction, veuillez patienter...");
+        iConnexionService.creationConnexion(connexionDTO);
+        ResponseEntity<?> creation = ResponseEntity.status(HttpStatus.CREATED).body(connexionDTO);
+        log.info("Une nouvelle transaction a été crée" + creation);
 
-    @RequestMapping("/connexions/id")
-    public Optional<Connexion>getRelation() {
-        Optional<Connexion> relation = iConnexionService.getConnexionById();
-        return relation;
+        return creation;
     }
-
 
 
 

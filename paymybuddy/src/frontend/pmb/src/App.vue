@@ -1,42 +1,46 @@
 <template>
-  <img src="./assets/logoPMB.png" alt="Pay My Buddy Logo" class="pic">
+  <img src="../src/assets/logoPMB.png" alt="Pay My Buddy Logo" class="pic">
   <div id="app">
-    <LiensPagesApp/>
-    <NouvelleTransaction/>
-    <TransactionTable/>
-    <TransactionsRecap/>
-   
-  </div>  
+    <div id="nav">
+        <router-link to="/">Accueil</router-link> |
+        <router-link to="/transaction/transactions">Transactions</router-link> |
+        <router-link to="/editionProfil">Profil</router-link> |
+        <router-link to="/connexions/nouvelleConnexion">Contact</router-link> |
+        <router-link to="/deconnexion">Déconnexion</router-link>|
+      </div>
+      <h2>Bonjour Jeff!</h2>
+      <router-view/>
+  </div>
 </template>
 
 <script>
 
-import LiensPagesApp from './components/LiensPagesApp.vue'
-import TransactionsRecap from './components/Transactions/TransactionsRecap.vue'; 
-import NouvelleTransaction from './components/Transactions/NouvelleTransaction.vue';
-import TransactionTable from './components/Transactions/TransactionTable';
-
-
 export default {
   name:'App',
   components:{
-    LiensPagesApp,
-    TransactionsRecap,
-    NouvelleTransaction,
-    TransactionTable,
   }
 }
 </script>
 <style>
 @import url('../src/style/reset.css');
-
+@import url('../src/style/Transactions.css');
   #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   
 }
+h2{
+  margin-left: auto;
+}
 
 .pic{
   height: 200px;
+}
+.nav {
+  text-align: right;
+  font-size: x-large;
+  display: flex;
+  margin-left: 1200px;
+  justify-content: space-evenly;
 }
 
 </style>

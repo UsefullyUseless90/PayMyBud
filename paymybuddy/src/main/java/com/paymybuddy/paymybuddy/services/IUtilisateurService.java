@@ -1,18 +1,17 @@
 package com.paymybuddy.paymybuddy.services;
 
-import com.paymybuddy.paymybuddy.models.Utilisateur;
+import com.paymybuddy.paymybuddy.models.dao.UtilisateurDAO;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface IUtilisateurService {
 
 
-    Optional<Utilisateur> getUtilisateurId();
+    Optional<UtilisateurDAO> getUtilisateurId();
 
-    Iterable<Utilisateur> getTousLesUtilisateurs();
+    Iterable<UtilisateurDAO> getTousLesUtilisateurs();
 
-    Utilisateur saveUtilisateur(Utilisateur utilisateur);
+    UtilisateurDAO saveUtilisateur(UtilisateurDAO utilisateurDAO);
 
     /*
     List<Utilisateur> utilisateurMaj(Utilisateur utilisateur);

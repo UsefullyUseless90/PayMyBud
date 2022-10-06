@@ -1,25 +1,26 @@
-import axios from 'axios'
+import axios from "axios";
 
 class TransactionsDataService {
   getAll() {
-      return axios.get('http://localhost:8080/paymybuddy/transaction')
+    return axios.get("http://localhost:8080/paymybuddy/transaction");
   }
 
-  getEmetteur() {
-      return axios.get(`http://localhost:8080/paymybuddy/transaction/emetteur`)
-  }
-  
-  // modification necessaire afin d'éviter les conflit entre emetteur et receveur lors des resultats requête. 
-  getDestinataire() { 
-    return axios.get(`http://localhost:8080/paymybuddy/transaction/receveur`)
+  // modification necessaire afin d'éviter les conflit entre emetteur et receveur lors des resultats requête.
+  getDestinataire() {
+    return axios.get(`http://localhost:8080/paymybuddy/transactions/1`);
   }
 
   create(data) {
-      return axios.post('http://localhost:8080/paymybuddy/transaction/nouvelleTransaction', data)
+    const response = axios.post(
+      "http://localhost:8080/paymybuddy/transactions/nouvelleTransaction",
+      data
+    );
+
+    return (this.transaction = response.data);
   }
 
   //update(id, data) {
-    //  return http.put(`http://localhost:8080/paymybuddy/transaction/`, data)
+  //  return http.put(`http://localhost:8080/paymybuddy/transaction/`, data)
   //}
 
   //delete(id) {
@@ -27,4 +28,4 @@ class TransactionsDataService {
   //}
 }
 
-export default new TransactionsDataService()
+export default new TransactionsDataService();

@@ -1,26 +1,56 @@
+<template>
+  <div class="gestion_entete">
+    <NouvelleConnexionVue/>
+  </div>
+    <table class="table">
+      <tbody v-for="(connexions, index) in connexions" :key="index">
+        <tr>
+          <td>{{ connexions.idUtilisateur}}</td>
+          <td>{{ connexions.nomPrenom }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+</template>
 <script>
-  import ConnexionDataServices from '../../services/ConnexionDataServices'
-  
-  export default {
-    name: 'connexiions-item',
-    data() {
-        return {
-            connexions: []
-        }
+import ConnexionDataServices from "../../services/ConnexionDataServices";
+import NouvelleConnexionVue from "./NouvelleConnexion.vue";
+export default {
+  name: "connexions-item",
+  data() {
+    return {
+      NouvelleConnexionVue,
+      connexions: [],
+    };
+  },
+  methods: {
+    retrieveConnexions() {
+      ConnexionDataServices.get()
+        .then((response) => {
+          this.connexions = response.data;
+        })
+        .catch((e) => {
+          alert(e);
+        });
     },
-    methods: {
-        retrieveConnexions() {
-            ConnexionDataServices.getAll()
-                .then(response => {
-                    this.connexions = response.data
-                })
-                .catch(e => {
-                    alert(e)
-                })
-        }
-    },
-    mounted() {
-        this.retrieveConnexions()
-    }
-  }
-  </script>
+  },
+  onConnexionChange(event) {
+    const src = event.target.id; // This should give you the id of the select that has fired the event
+    const index = parseInt(src.replace("connexions.id", ""));
+    this.requestItems[index].connexions.id = event.target.value;
+    console.log(this.requestItems[index].connexions.id);
+  },
+  retrieveConnexions() {
+    ConnexionDataServices.get()
+      .then((response) => {
+        this.connexions = response.data;
+      })
+      .catch((e) => {
+        alert(e);
+      });
+  },
+  mounted() {
+    this.retrieveConnexions();
+  },
+};
+</script>

@@ -1,134 +1,152 @@
 <template>
   <div class="gestion_entete">
-    <h2>Envoyer de l'argent<NouvelleConnexion/></h2>
+    <h2>Envoyer de l'argent<NouvelleConnexion /></h2>
   </div>
-  <div class="carre" style="background-color:lightgrey;">
-    <div class="boutons">
-      <select class="utilisateur-info" name="utiliateur-selection" v-model="selectedUtilisateur">
-        <option value="">Envoyer de l'argent</option>
-        <option v-for="(utilisateurs, index) in utilisateurs" :key="index" :value="item.utilisateurs">
-            {{item.utilisateurs}}
-          </option>
+  <div class="carre" style="background-color: lightgrey">
+    <div class="infos">
+      <select class="form-control" v-model="transactionDTO.destinataire">
+        <option value="">--Utilisateur--</option>
+        <option
+          v-for="(value, index) in connexions"
+          :key="index"
+          :value="value">
+          {{ value.idUtilisateur }}
+          {{ value.nomPrenom }}
+        </option>
       </select>
-      {{ selectedUtilisateur }}
-      <input type="number" id="tentacles" name="tentacles" min="01" max="100000"/>
-      <button class="button2">Payer</button>
+      <input
+        type="number"
+        id="tentacles"
+        name="tentacles"
+        min="1"
+        max="10000"
+        v-model="transactionDTO.montant"
+      />
+      <input
+        type="text"
+        id="description"
+        name="description"
+        v-model="transactionDTO.description"
+      />
+      <input type="date" id="date" name="date" v-model="transactionDTO.date" />
+      <button v-on:click="submit()" class="button2">Payer</button>
     </div>
-    </div>
+  </div>
 </template>
 
-
-
 <script>
-import TransactionsDataServices from '../../services/TransactionsDataServices';
-import UtilisateurDataServices from '@/services/UtilisateurDataServices';
-import NouvelleConnexion from '../Connexions/NouvelleConnexion.vue';
-
+import TransactionsDataServices from "../../services/TransactionsDataServices";
+import ConnexionDataServices from "@/services/ConnexionDataServices";
+import NouvelleConnexion from "../Connexions/NouvelleConnexion.vue";
 
 export default {
-    name: "transaction-item",
-    data() {
-        return {
-            transaction: {
-                Date: Date,
-                descritption: "",
-                Montant: 0,
-                emetteur: "",
-                destinataire: "",
-            },
-            NouvelleConnexion,
-            UtilisateurDataServices,
-            submitted: false,
-            selectedUtilisateur:"",
-            utilisateurs: [],
-        };
+  name: "transactionDTO-item",
+  data() {
+    return {
+      transactionDTO: {
+        emetteur: {
+          idUtilisateur: 1,
+          nomPrenom: "Jeff Nippard",
+        },
+        destinataire: {
+          idUtilisateur: "",
+          nomPrenom: "",
+        },
+        date: "",
+        description: "",
+        montant: 0,
+      },
+      NouvelleConnexion,
+      ConnexionDataServices,
+      submitted: false,
+      connexions: [],
+      transactions: [],
+    };
+  },
+  methods: {
+    getNow: function () {
+      const today = new Date();
+      const date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+      const time =
+        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      const dateTime = date + " " + time;
+      this.timestamp = dateTime;
     },
-    methods: {
-        create() {
-            TransactionsDataServices.create(this.data)
-                .then(response => {
-                this.transaction.emetteur = response.data.emetteur;
-                this.submitted = true;
-            })
-                .catch(e => {
-                alert(e);
-            });
-          },
-        newTransaction() {
-            this.submitted = false;
-            this.transaction = {};
-        },
-        loadFromApi(){
-          this.utilisateurs=[
-            UtilisateurDataServices.getAll()
-          ]
-        },
-        created(){
-          this.loadFromApi();
-        },
+    submit() {
+      TransactionsDataServices.create(this.transactionDTO)
+        .then((response) => {
+          this.transactionDTO = response.data;
+          this.submitted = true;
+        })
+        .catch((e) => {
+          alert(e);
+        });
     },
-    components: { NouvelleConnexion },
-}
-  
+    onConnexionChange(event) {
+      const src = event.target.id; // This should give you the id of the select that has fired the event
+      const index = parseInt(src.replace("connexions.id", ""));
+      this.requestItems[index].connexions.id = event.target.value;
+      console.log(this.requestItems[index].connexions.id);
+    },
+    retrieveConnexions() {
+      ConnexionDataServices.get()
+        .then((response) => {
+          this.connexions = response.data;
+        })
+        .catch((e) => {
+          alert(e);
+        });
+    },
+  },
 
+  mounted() {
+    this.retrieveConnexions();
+  },
+  created() {
+    this.getNow();
+  },
+  components: { NouvelleConnexion },
+};
 </script>
 
 <style>
-select{
-  height: 50px;
-  width: 350px;
-  margin-left: 120px;
-}
-label {
-  display: block;
-  font: 1rem 'Fira Sans', sans-serif;
-
-}
-h2{
-  margin-left: 500px;
-  font-weight: bold;
-  font-size: xx-large;
-  margin-top: auto;
-  margin-bottom: auto;
-}
-.boutons{
-  margin-left: 250px;
+.carre {
+  width: 1550px;
+  height: 150px;
+  margin-left: auto;
   margin-right: auto;
-  margin-top: 50px;
 }
-
-input,
-label {
+.gestion_entete {
+  font-weight: bold;
+  font-size: x-large;
+  margin-left: 500px;
+  margin-right: 330px;
+}
+.infos {
   height: 45px;
-  width: 150px;
+  width: 25%;
   border-radius: 5px / 5px;
-  margin-left: 20px;
+  display: flex;
+  justify-content: space-between;
 }
-.button2{
+.button2 {
   background-color: green;
   color: #fff;
   height: 50px;
   width: 250px;
-  border:1px green;
+  border: 1px green;
   border-radius: 20px / 20px;
-  margin-left: 25px;
   font-weight: bold;
   font-size: x-large;
 }
-.rectangle{
+.rectangle {
   width: 2600px;
   height: 50px;
   font-size: x-large;
-}
-.gestion_entete{
-  display: inline-block;
-
-}
-.carre {
-  display: flex;
-  width: 1550px;
-  height: 150px;
-  margin-left: 500px;
-  
 }
 </style>

@@ -1,15 +1,94 @@
-<template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-  </div>
-</template>
+  <script>
 
-<script>
-// @ is an alias to /src
-
-export default {
-  name: 'damn-item',
-  components: {
+export default{
+ 
+  name: "connexion-id",
+ 
+    data(){
+      return {
+        utilisateurDTO:{
+          idUtilisateur:"",
+          nomPrenom:""
+        }
+      }
+    },
+    props:['id'],
+  mounted(){
+   // this.utilisateurDTO.idUtilisateur = this.route.params.idUtilisateur
+    //this.utilisateurDTO.nomPrenom= this.$route.query.nomPrenom
   }
 }
-</script>
+  </script>
+
+<template>
+  <main>
+    <h1>Accueil</h1>
+    <body>
+      <nav>
+        <button class="button1"><router-link to="/connexions/nouvelleConnexion">Ajouter contact</router-link></button>
+      </nav>
+      <router-view/>
+        <h2>Bienvenue!</h2> 
+          <div class="titre">
+            <router-link to="/"> Mon profil </router-link>
+          </div>
+        <h3>{{utilisateurDTO.nomPrenom}}</h3>
+        <h3>{{utilisateurDTO.nomPrenom.fondsDisponible}}</h3>
+        <button class="button2"><router-link to="/transaction/transactions"> Effectuer une transaction </router-link></button>
+    </body>
+  </main>
+</template>
+<style>
+.pic{
+  height: 200px;
+}
+.head{
+  font-size: 40px;
+  height: 200px;
+  color: white;
+  margin-top: auto;
+  display: flex;
+  justify-content: space-evenly;
+  display: flex;
+  justify-content: space-evenly;
+}
+.liens{
+  margin-top: auto;
+  margin-left: auto;
+}
+.rectangle{
+  width: 2600px;
+  height: 50px;
+  font-size: x-large;
+}
+.boutons{
+  margin-left: 250px;
+  margin-right: auto;
+  margin-top: 50px;
+}
+.button1{
+  margin-left: 2000px;
+  background-color: blue;
+  color: #fff;
+  height: 50px;
+  width: 250px;
+  border-radius: 20px / 20px;
+  font-weight: bold;
+  font-size: x-large;
+}
+.titre{
+  display: flex;
+}
+.button2{
+  display: flex;
+  background-color: green;
+  color: #fff;
+  height: auto;
+  width: 250px;
+  border:1px green;
+  border-radius: 20px / 20px;
+  margin-left: 2000px;
+  font-weight: bold;
+  font-size: x-large;
+}
+</style>

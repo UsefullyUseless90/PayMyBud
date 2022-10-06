@@ -1,25 +1,25 @@
-import axios from "axios"
+import axios from "axios";
 
 class UtilisateurDataServices {
-    getAll() {
-        return axios.get('http://localhost:8080/paymybuddy/utilisateurs')
-    }
+  getAll() {
+    return axios.get("http://localhost:8080/paymybuddy/utilisateurs");
+  }
 
-    get(id) {
-        return axios.get(`/utilisateur/${id}`)
-    }
+  get(id) {
+    return axios.get(`/utilisateur/${id}`);
+  }
 
-    create(data) {
-        return axios.post('/inscription', data)
-    }
+  create(data) {
+    return axios.post("/inscription", data);
+  }
 
-    update(id, data) {
-        return axios.put(`/utilisateur/${id}`, data)
-    }
+  update(id, data) {
+    return axios.put(`/utilisateur/${id}`, data);
+  }
 
-    delete(id) {
-        return axios.delete(`/utilisateur/${id}`)
-    }
+  delete(id) {
+    return axios.delete(`/utilisateur/${id}`);
+  }
 }
 
-export default new UtilisateurDataServices()
+export default new UtilisateurDataServices();

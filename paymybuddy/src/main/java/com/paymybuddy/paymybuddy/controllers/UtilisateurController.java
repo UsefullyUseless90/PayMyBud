@@ -1,6 +1,6 @@
 package com.paymybuddy.paymybuddy.controllers;
 
-import com.paymybuddy.paymybuddy.models.Utilisateur;
+import com.paymybuddy.paymybuddy.models.dao.UtilisateurDAO;
 import com.paymybuddy.paymybuddy.services.IUtilisateurService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,9 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 public class UtilisateurController {
 
@@ -23,27 +23,27 @@ public class UtilisateurController {
     IUtilisateurService iUtilisateurService;
 
     @RequestMapping("/utilisateurs")
-    public ResponseEntity<Iterable<Utilisateur>>getUtilisateurs(){
+    public ResponseEntity<Iterable<UtilisateurDAO>>getUtilisateurs(){
         log.info("Recherche en cours, veuillez patienter...");
         log.info("Voici une liste de l'ensemble des utilisateurs:" + iUtilisateurService.getTousLesUtilisateurs());
-        Iterable<Utilisateur> utilisateurs = iUtilisateurService.getTousLesUtilisateurs();
-        ResponseEntity<Iterable<Utilisateur>> listeUtilisateurs = ResponseEntity.status(HttpStatus.OK).body(utilisateurs);
+        Iterable<UtilisateurDAO> utilisateurs = iUtilisateurService.getTousLesUtilisateurs();
+        ResponseEntity<Iterable<UtilisateurDAO>> listeUtilisateurs = ResponseEntity.status(HttpStatus.OK).body(utilisateurs);
         return listeUtilisateurs;
     }
     @RequestMapping(value = "/utilisateur", params = "id", method = RequestMethod.GET)
-    public ResponseEntity<Optional<Utilisateur>>getUtilisateurParIdentifiant(@RequestParam Integer idUtilisateur){
+    public ResponseEntity<Optional<UtilisateurDAO>>getUtilisateurParIdentifiant(@RequestParam Integer idUtilisateur){
         log.info("Recherche en cours, veuillez patienter...");
         log.info("Voici le resultat de votre demande:" + iUtilisateurService.getUtilisateurId());
-        Optional<Utilisateur> id = iUtilisateurService.getUtilisateurId();
-        ResponseEntity<Optional<Utilisateur>>identifiantUtilisateur = ResponseEntity.status(HttpStatus.OK).body(id);
+        Optional<UtilisateurDAO> id = iUtilisateurService.getUtilisateurId();
+        ResponseEntity<Optional<UtilisateurDAO>>identifiantUtilisateur = ResponseEntity.status(HttpStatus.OK).body(id);
         return identifiantUtilisateur;
     }
     @PostMapping
     @RequestMapping("/inscription")
-    public ResponseEntity<Utilisateur> saveUtilisateur(@RequestBody Utilisateur utilisateur) throws IOException, JSONException {
+    public ResponseEntity<UtilisateurDAO> saveUtilisateur(@RequestBody UtilisateurDAO utilisateurDAO) throws IOException, JSONException {
         log.info("Création du nouvel utilisateur, veuillez patienter...");
-        iUtilisateurService.saveUtilisateur(utilisateur);
-        ResponseEntity<Utilisateur> creation = ResponseEntity.status(HttpStatus.CREATED).body(utilisateur);
+        iUtilisateurService.saveUtilisateur(utilisateurDAO);
+        ResponseEntity<UtilisateurDAO> creation = ResponseEntity.status(HttpStatus.CREATED).body(utilisateurDAO);
         log.info("Un nouvel utilisateur a été crée" + creation);
         return creation;
     }
