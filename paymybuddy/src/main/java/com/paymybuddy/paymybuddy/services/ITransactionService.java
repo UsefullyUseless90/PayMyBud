@@ -11,6 +11,6 @@ public interface ITransactionService {
     Iterable<TransactionDAO> getTransactions();
     Optional<TransactionDAO> getEchangeParEmetteur(Integer idUtilisateur);
     Optional<TransactionDAO> getEchangeParDestinataire(Integer idUtilisateur);
-    TransactionDTO creationTransaction(TransactionDTO transactionDTO);
+    TransactionDTO creationTransaction(TransactionDTO transactionDTO) throws Exception;
     List<TransactionDAO> getTransactionsById(Integer idUtilisateur);
 }

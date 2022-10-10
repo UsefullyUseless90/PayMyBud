@@ -31,10 +31,10 @@ public class ConnexionController {
     }
     @PostMapping("/nouvelleConnexion")
     public ResponseEntity<?> creationConnexion(@RequestBody ConnexionDTO connexionDTO) throws IOException, JSONException {
-        log.info("Création d'une nouvelle transaction, veuillez patienter...");
+        log.info("Création d'une nouvelle connexion, veuillez patienter...");
         iConnexionService.creationConnexion(connexionDTO);
         ResponseEntity<?> creation = ResponseEntity.status(HttpStatus.CREATED).body(connexionDTO);
-        log.info("Une nouvelle transaction a été crée" + creation);
+        log.info("Une nouvelle connexion a été crée" + creation);
 
         return creation;
     }

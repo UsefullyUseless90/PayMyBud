@@ -52,7 +52,7 @@ public class TransactionController {
         return transaction;
     }
     @PostMapping("/nouvelleTransaction")
-    public ResponseEntity<TransactionDTO> creationTransaction(@RequestBody TransactionDTO transactionDTO) throws IOException, JSONException {
+    public ResponseEntity<TransactionDTO> creationTransaction(@RequestBody TransactionDTO transactionDTO) throws Exception {
         log.info("Création d'une nouvelle transaction, veuillez patienter...");
         iTransactionService.creationTransaction(transactionDTO);
         ResponseEntity<TransactionDTO> creation = ResponseEntity.status(HttpStatus.CREATED).body(transactionDTO);

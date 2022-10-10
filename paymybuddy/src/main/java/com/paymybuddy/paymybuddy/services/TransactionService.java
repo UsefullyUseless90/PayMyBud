@@ -44,13 +44,22 @@ public class TransactionService implements ITransactionService {
     }
 
     @Override
-    public TransactionDTO creationTransaction(TransactionDTO transactionDTO) {
+    public TransactionDTO creationTransaction(TransactionDTO transactionDTO) throws Exception {
 
         UtilisateurDAO emetteurDAO =  utilisateurRepository.findById(transactionDTO.getEmetteur().getIdUtilisateur()).orElse(null);
         UtilisateurDAO destinataireDAO =  utilisateurRepository.findById(transactionDTO.getDestinataire().getIdUtilisateur()).orElse(null);
 
         TransactionDAO transactionDAO = new TransactionDAO(transactionDTO.getDescription(), transactionDTO.getMontant(), transactionDTO.getDate(), emetteurDAO, destinataireDAO);
 
+        if(transactionDTO.getMontant() > emetteurDAO.getFondsDisponibles()){
+            throw new Exception("Vous ne disposez pas de suffisamment de fonds pour effectuer cette transaction");
+        }else {
+            //Calcul commission//
+
+            
+            emetteurDAO.setFondsDisponibles(emetteurDAO.getFondsDisponibles() - transactionDTO.getMontant());
+            destinataireDAO.setFondsDisponibles(destinataireDAO.getFondsDisponibles() + transactionDTO.getMontant());
+        }
         transactionDAO = transactionRepository.save(transactionDAO);
 
         return new TransactionDTO(transactionDAO);

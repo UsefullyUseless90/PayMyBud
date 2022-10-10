@@ -1,7 +1,10 @@
 <template>
   <div class="gestion_entete">
-    <h2>Envoyer de l'argent<NouvelleConnexion /></h2>
+    <h2>Envoyer de l'argent</h2><button class="button1">
+    <router-link to="/connexions/nouvelleConnexion">Ajouter contact</router-link>
+  </button>
   </div>
+  <router-view/>
   <div class="carre" style="background-color: lightgrey">
     <div class="infos">
       <select class="form-control" v-model="transactionDTO.destinataire">
@@ -29,7 +32,7 @@
         v-model="transactionDTO.description"
       />
       <input type="date" id="date" name="date" v-model="transactionDTO.date" />
-      <button v-on:click="submit()" class="button2">Payer</button>
+      <button v-on:click="submit()" class="button2Transactions">Payer</button>
     </div>
   </div>
 </template>
@@ -37,8 +40,7 @@
 <script>
 import TransactionsDataServices from "../../services/TransactionsDataServices";
 import ConnexionDataServices from "@/services/ConnexionDataServices";
-import NouvelleConnexion from "../Connexions/NouvelleConnexion.vue";
-
+import Connexions from "../../views/Connexions.vue"
 export default {
   name: "transactionDTO-item",
   data() {
@@ -56,7 +58,7 @@ export default {
         description: "",
         montant: 0,
       },
-      NouvelleConnexion,
+      Connexions,
       ConnexionDataServices,
       submitted: false,
       connexions: [],
@@ -110,7 +112,7 @@ export default {
   created() {
     this.getNow();
   },
-  components: { NouvelleConnexion },
+  components: {},
 };
 </script>
 
@@ -134,11 +136,21 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-.button2 {
-  background-color: green;
+.button1 {
+  margin-left: 900px;
+  background-color: blue;
   color: #fff;
   height: 50px;
   width: 250px;
+  border: 1px green;
+  border-radius: 20px / 20px;
+  font-weight: bold;
+  font-size: x-large;
+}
+.button2Transactions {
+  background-color: green;
+  color: #fff;
+  height: 50px;
   border: 1px green;
   border-radius: 20px / 20px;
   font-weight: bold;

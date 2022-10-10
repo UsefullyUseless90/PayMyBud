@@ -4,6 +4,8 @@ import TransactionsParticulier from "../components/Transactions/TransactionParti
 import ConnexionsListe from "../components/Connexions/ConnexionsListe.vue";
 import UtilisateurContenu from "../components/Utilisateurs/UtilisateurContenu.vue"
 import Inscription from "../views/Inscription.vue"
+import Transactions from "../views/Transactions.vue"
+import Connexions from "../views/Connexions.vue"
 
 
   const routes = [
@@ -33,7 +35,7 @@ import Inscription from "../views/Inscription.vue"
     {
       path: "/connexions/nouvelleConnexion",
       name: "ConnexionDemande",
-      component: () => import("../views/Connexions.vue"),
+      component: Connexions,
     },
     // Partie Transaction
     {
@@ -49,7 +51,7 @@ import Inscription from "../views/Inscription.vue"
     {
       path: "/transaction/transactions",
       name: "transactions",
-      component: () => import("../views/Transactions.vue"),
+      component: Transactions,
       
     },
     {

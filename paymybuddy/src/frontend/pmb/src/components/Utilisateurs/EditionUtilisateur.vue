@@ -26,7 +26,7 @@
       </form>
     </div>
     <div class="card-footer">
-      <button @click="modification" class="btn btn-primary">Validation Changement Informations</button>
+      <button onclick="myFunction()" @click="modification" class="btn btn-primary">Validation Changement Informations</button>
     </div>
   </div>
 </template>
@@ -67,6 +67,9 @@ export default {
           alert(e);
         });
     },
+    myFunction() {
+      location.reload();
+    }
   },
   mounted() {
     this.getUtilisateur(this.$route.params.id);

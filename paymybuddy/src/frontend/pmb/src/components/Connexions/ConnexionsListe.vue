@@ -54,3 +54,19 @@ export default {
   },
 };
 </script>
+<style>
+  table {
+    text-align: center;
+    font-weight: bold;
+    font-size: xx-large;
+    color: #fff;
+    height: 150px;
+    width: 1550px;
+    margin-left: 20%;
+  }
+  
+  td {
+    color: black;
+  }
+  </style>
+  

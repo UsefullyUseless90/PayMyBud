@@ -15,7 +15,7 @@
           name="idUtilisateur"
           v-model="connexionDTO.demandeur.idUtilisateur"/>
       </div>
-      <button v-on:click="submitDemande()" class="button1">Envoyer la demande</button>
+      <button v-on:click="submitDemande()" onclick="myFunction()" class="button1">Envoyer la demande</button>
   </div>
 </template>
 <script>
@@ -49,6 +49,9 @@ export default {
           alert(e);
         });
     },
+    myFunction() {
+      location.reload();
+    }
   }
 };
 </script>
@@ -76,5 +79,6 @@ export default {
   border-radius: 5px / 5px;
   display: flex;
   justify-content: space-evenly;
+  margin-left: 20%;
 }
 </style>

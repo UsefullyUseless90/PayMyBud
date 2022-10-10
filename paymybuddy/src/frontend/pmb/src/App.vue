@@ -9,17 +9,18 @@
         <router-link to="/deconnexion">Déconnexion</router-link>|
       </div>
       <h2>Bonjour Jeff!</h2>
+      
       <router-view/>
   </div>
 </template>
 
 <script>
-
 export default {
   name:'App',
   components:{
-  }
+  },
 }
+
 </script>
 <style>
 @import url('../src/style/reset.css');
@@ -39,7 +40,6 @@ h2{
   text-align: right;
   font-size: x-large;
   display: flex;
-  margin-left: 1200px;
   justify-content: space-evenly;
 }
 

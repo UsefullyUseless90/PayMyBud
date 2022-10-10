@@ -12,12 +12,7 @@ export default{
         }
       }
     },
-    props:['id'],
-  mounted(){
-   // this.utilisateurDTO.idUtilisateur = this.route.params.idUtilisateur
-    //this.utilisateurDTO.nomPrenom= this.$route.query.nomPrenom
   }
-}
   </script>
 
 <template>
@@ -36,6 +31,7 @@ export default{
         <h3>{{utilisateurDTO.nomPrenom.fondsDisponible}}</h3>
         <button class="button2"><router-link to="/transaction/transactions"> Effectuer une transaction </router-link></button>
     </body>
+    <router-view/>
   </main>
 </template>
 <style>
@@ -67,7 +63,6 @@ export default{
   margin-top: 50px;
 }
 .button1{
-  margin-left: 2000px;
   background-color: blue;
   color: #fff;
   height: 50px;
