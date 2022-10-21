@@ -1,14 +1,19 @@
 package com.paymybuddy.paymybuddy.repositories;
 
-import com.paymybuddy.paymybuddy.models.Connexion;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import com.paymybuddy.paymybuddy.models.dao.ConnexionDAO;
+import com.paymybuddy.paymybuddy.models.dao.UtilisateurDAO;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-@EnableJpaRepositories("com.paymybuddy.paymybuddy.repositories")
-public interface ConnexionRepository extends JpaRepository<Connexion, Integer> {
 
+public interface ConnexionRepository extends CrudRepository<ConnexionDAO, Integer> {
 
+    @Query("select c from ConnexionDAO c where c.embeddedConnexion.receveur = :utilisateur")
+    List<ConnexionDAO> getMyConnexions(@Param("utilisateur") UtilisateurDAO utilisateurDAO);
 
 }
