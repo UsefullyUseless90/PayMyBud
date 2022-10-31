@@ -1,11 +1,11 @@
 <template>
   <div>
     <table class="table">
-      <tbody v-for="(transactions, index) in transactions" :key="index">
+      <tbody v-for="(transaction, index) in transactions" :key="index">
         <tr>
-          <td>{{ transactions.embeddedTransaction.date }}</td>
-          <td>{{ transactions.description }}</td>
-          <td>{{ transactions.montant }}</td>
+          <td>{{ transaction.embeddedTransaction }}</td>
+          <td>{{ transaction.description }}</td>
+          <td>{{ transaction.montant }}</td>
         </tr>
       </tbody>
     </table>
@@ -19,14 +19,14 @@ export default {
   name: "transactions-item",
   data() {
     return {
-      transactions: [],
+      transactions:[],
     };
   },
   methods: {
     retrieveTransactions() {
       TransactionsDataServices.getDestinataire()
         .then((response) => {
-          this.transactions = response.data;
+          this.transactions = {...response.data};
         })
         .catch((e) => {
           alert(e);

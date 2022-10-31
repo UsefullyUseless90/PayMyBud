@@ -9,7 +9,7 @@ class UtilisateurDataServices {
   }
 
   getPartieUtilisateur() {
-    return axios.get(API_URL + 'user', { headers: authHeader() });
+    return axios.get(API_URL + '/user', { headers: authHeader() });
   }
 
   get(id) {
@@ -23,9 +23,9 @@ class UtilisateurDataServices {
       return (this.utilisateur = response.data);
   }
   login(data) {
-    const response = axios.get(
+    const response = axios.post(
       "http://localhost:8080/paymybuddy/login", data);
-     return (this.utilisateur = response.data) 
+     return (this.utilisateurDAO = response.data) 
   }
   logout(){
     return axios.get(

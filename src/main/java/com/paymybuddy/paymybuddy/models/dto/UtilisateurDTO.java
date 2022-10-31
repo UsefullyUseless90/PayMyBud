@@ -1,5 +1,6 @@
 package com.paymybuddy.paymybuddy.models.dto;
 
+import com.paymybuddy.paymybuddy.models.RoleUtilisateurs;
 import com.paymybuddy.paymybuddy.models.dao.UtilisateurDAO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 @Getter
@@ -19,10 +23,20 @@ public class UtilisateurDTO implements Serializable {
 
     private String nomPrenom;
 
+    private String motDePasse;
+
+    public boolean actif;
+
+    public List<RoleUtilisateurs> roles;
+
 
     public UtilisateurDTO(UtilisateurDAO utilisateurDAO) {
         this.idUtilisateur = utilisateurDAO.getIdUtilisateur();
         this.nomPrenom = utilisateurDAO.getNom().concat(" ").concat(utilisateurDAO.getPrenom());
+        this.motDePasse = utilisateurDAO.getMotDePasse();
+        this.actif = actif;
+        if(roles!=null)
+            this.roles = new ArrayList<>(roles);
     }
 
 }

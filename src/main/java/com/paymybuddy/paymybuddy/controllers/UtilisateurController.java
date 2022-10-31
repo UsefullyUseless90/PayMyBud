@@ -47,6 +47,11 @@ public class UtilisateurController {
         log.info("Un nouvel utilisateur a été crée" + creation);
         return creation;
     }
+    @RequestMapping("/user/accueil")
+    public String messageDeBienvenue(){
+        log.info("Login success!");
+        return "Bienvenue chez PayMyBuddy";
+    }
     /*@PutMapping
     public ResponseEntity<?> updatePerson(@RequestBody Utilisateur utilisateur) throws IOException, JSONException {
         log.info("Checking, please wait...");

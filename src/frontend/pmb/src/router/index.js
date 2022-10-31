@@ -91,5 +91,17 @@ import Logout from "../views/Logout.vue"
     history: createWebHistory(),
     routes,
   })
+  
+  router.beforeEach((to, from, next) => {
+    const requiresAuth = !to.matched.some((record) => record.meta.nonRequiresAuth);
+    const isLoginPage = to.matched.some((record) => record.meta.loginPage);
+    const isAuthenticated = localStorage.getItem('auth');
+    if (requiresAuth && !isAuthenticated) {
+      /*next('/');*/
+    } else if (isLoginPage && isAuthenticated) {
+      router.push('/accueil');
+    }
+    next();
+  });
 
   export default router;

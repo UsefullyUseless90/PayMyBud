@@ -1,61 +1,68 @@
-import AuthService from '../services/auth.service';
+const state = {
+  isAuthenticated: localStorage.getItem('auth'),
+  user:null,
+  error: null,
+  loading:null,
+  };
 
-const user = JSON.parse(localStorage.getItem('user'));
-const initialState = user
-  ? { status: { loggedIn: true }, user }
-  : { status: { loggedIn: false }, user: null };
-
-export const auth = {
-  namespaced: true,
-  state: initialState,
-  actions: {
-    login({ commit }, user) {
-      return AuthService.login(user).then(
-        user => {
-          commit('loginSuccess', user);
-          return Promise.resolve(user);
-        },
-        error => {
-          commit('loginFailure');
-          return Promise.reject(error);
-        }
-      );
-    },
-    logout({ commit }) {
-      AuthService.logout();
-      commit('logout');
-    },
-    register({ commit }, user) {
-      return AuthService.register(user).then(
-        response => {
-          commit('registerSuccess');
-          return Promise.resolve(response.data);
-        },
-        error => {
-          commit('registerFailure');
-          return Promise.reject(error);
-        }
-      );
-    }
+const getters = {
+  getIsAuthenticated(state) {
+    return state.isAuthenticated;
   },
-  mutations: {
-    loginSuccess(state, user) {
-      state.status.loggedIn = true;
-      state.user = user;
-    },
-    loginFailure(state) {
-      state.status.loggedIn = false;
-      state.user = null;
-    },
-    logout(state) {
-      state.status.loggedIn = false;
-      state.user = null;
-    },
-    registerSuccess(state) {
-      state.status.loggedIn = false;
-    },
-    registerFailure(state) {
-      state.status.loggedIn = false;
-    }
-  }
+  getCurrentUser(state) {
+    return state.currentUser;
+  },
+};
+
+const mutations = {
+  setUser(state, payload) {
+    state.user = payload;
+  },
+  setAuth(payload) {
+    localStorage.setItem('auth', payload);
+  },
+  clearAuth() {
+    localStorage.removeItem('auth');
+  },
+  setError(state, payload) {
+    state.error = payload;
+  },
+  setLoading(state, payload) {
+    state.loading = payload;
+  },
+};
+
+const actions = {
+  userSignIn({ commit }, payload) {
+    const data = {
+      username: payload.username,
+      password: payload.password,
+    };
+    commit('setLoading', true);
+    axios.post('http://localhost:8091/login', data)
+      .then(() => {
+        commit('setAuth', true);
+        commit('setLoading', false);
+        commit('setError', null);
+        EventBus.$emit('authenticated', 'User authenticated');
+        router.push('/home');
+      })
+      .catch((error) => {
+        commit('setError', error.message);
+        commit('setLoading', false);
+      });
+  },
+  userSignOut({ commit }) {
+    commit('clearAuth');
+    EventBus.$emit('authenticated', 'User not authenticated');
+    router.push('/signIn');
+  },
+};
+
+
+export default {
+  state,
+  getters,
+  mutations,
+  actions
 };

@@ -4,23 +4,24 @@ const API_URL = 'http://localhost:8080/paymybuddy/login';
 
 class AuthService {
   async login(utilisateurDAO) {
-    const response = await axios
-      .post(API_URL + 'signin', {
+    return axios
+      .post(API_URL, {
         nom_prenom: utilisateurDAO.nomPrenom,
         mot_De_Passe: utilisateurDAO.motDePasse
-      });
+      })
+      .then(response => {
     if (response.data.accessToken) {
       localStorage.setItem('user', JSON.stringify(response.data));
     }
     return response.data;
-  }
-
+  })
+}
   logout() {
     localStorage.removeItem('user');
   }
 
   register(utilisateurDAO) {
-    return axios.post(API_URL + 'signup', {
+    return axios.post(API_URL + '/inscription', {
       Nom: utilisateurDAO.nom,
       Prenom: utilisateurDAO.prenom,
       Adresse_Email: utilisateurDAO.adresseEmail,

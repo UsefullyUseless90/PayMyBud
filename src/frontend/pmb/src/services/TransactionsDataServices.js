@@ -7,12 +7,12 @@ class TransactionsDataService {
 
   // modification necessaire afin d'éviter les conflit entre emetteur et receveur lors des resultats requête.
   getDestinataire() {
-    return axios.get(`http://localhost:8080/paymybuddy/transactions/1`);
+    return axios.get(`http://localhost:8080/paymybuddy/user/transactions/1`);
   }
 
   create(data) {
     const response = axios.post(
-      "http://localhost:8080/paymybuddy/transactions/nouvelleTransaction",
+      "http://localhost:8080/paymybuddy/user/transactions/nouvelleTransaction",
       data
     );
 
