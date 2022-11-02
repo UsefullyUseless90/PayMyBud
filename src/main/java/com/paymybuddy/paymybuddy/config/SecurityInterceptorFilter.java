@@ -36,7 +36,7 @@ public class SecurityInterceptorFilter implements HandlerInterceptor {
 
         if( ! isOptionsRequest(request) ) {
 
-            if( ! isPublicRequest(request) ) {
+            if (!isPublicRequest(request)) {
 
                 ObjectMapper mapper = new ObjectMapper().registerModule(new ParameterNamesModule()).registerModule(new Jdk8Module()).registerModule(new JavaTimeModule());
 
@@ -46,14 +46,14 @@ public class SecurityInterceptorFilter implements HandlerInterceptor {
                 UtilisateurDTO user = mapper.readValue(headerUser, UtilisateurDTO.class);
                 String token = headerAuthorization.substring(7);  // Authorization Bearer XXXXXXXXXXXXXXXXXXXX
 
-                if (user == null || ! jwt.validate(token)) {
+                if (user == null || !jwt.validateToken(token, user)) {
                     return unauthorized(response, "Expired access");
                 }
+                restoreApplicationContext(user, request);
                 saveUserInSession(user, request);
             }
 
         }
-
         return true;
     }
 

@@ -16,10 +16,11 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class UtilisateurDTO implements Serializable {
 
     private Integer idUtilisateur;
+
+    private String adresseEmail;
 
     private String nomPrenom;
 
@@ -28,6 +29,10 @@ public class UtilisateurDTO implements Serializable {
     public boolean actif;
 
     public List<RoleUtilisateurs> roles;
+
+    public UtilisateurDTO(){
+
+    }
 
 
     public UtilisateurDTO(UtilisateurDAO utilisateurDAO) {

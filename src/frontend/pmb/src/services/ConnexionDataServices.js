@@ -2,15 +2,15 @@ import axios from 'axios';
 
 class ConnexionsDataService {
   getAll() {
-    return axios.get("http://localhost:8080/paymybuddy/connexions");
+    return axios.get("http://localhost:8080/paymybuddy/user/connexions");
   }
 
   get() {
-    return axios.get(`http://localhost:8080/paymybuddy/connexions/1`);
+    return axios.get(`http://localhost:8080/paymybuddy/user/connexions/1`);
   }
   create(data) {
     const response = axios.post(
-      "http://localhost:8080/paymybuddy/connexions/nouvelleConnexion",
+      "http://localhost:8080/paymybuddy/user/connexions/nouvelleConnexion",
       data
     );
 

@@ -7,12 +7,12 @@
         </div>
           <div class="form-group">
             <label for="AdresseEmail"> Adresse Email </label>
-            <input type="text" name="adresseEmail" id="adresseEmail" v-model="utilisateurDAO.adresseEmail"/>
+            <input type="text" name="adresseEmail" id="adresseEmail" v-model="utilisateurDTO.adresseEmail"/>
           </div>
       </div>
       <div class="form-group">
             <label for="motDePasse">Mot de passe</label>
-            <input v-model="utilisateurDAO.motDePasse" type="password" name="motDePasse" id="motDePasse"/>
+            <input v-model="utilisateurDTO.motDePasse" type="password" name="motDePasse" id="motDePasse"/>
       </div>        
       <div class="card-footer">
         <button v-on:click="login()" class="btn btn-primary">Se connecter</button>
@@ -28,7 +28,7 @@ export default {
   name: 'Login',
   data() {
     return {
-      utilisateurDAO:{
+      utilisateurDTO:{
         adresseEmail: "",
         motDePasse:""
       }  
@@ -40,19 +40,16 @@ export default {
     ...mapMutations(["setUser","setToken"]),
   
     login(){
-      let formData = new FormData();
-      formData.set("username", this.utilisateurDAO.adresseEmail);
-      formData.set("password", this.utilisateurDAO.motDePasse);
-      axios.post('http://localhost:8080/paymybuddy/login', formData, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
-      .then((result) => {
-        console.log(result);
-             window.location = '/accueil';
-             axios.get('http://localhost:8080/paymybuddy/user/accueil')
-      })
-      .catch((e) => {
-        alert(e);
-      })
-    },
+  axios.post('http://localhost:8080/paymybuddy/login/signin', this.utilisateurDTO)
+  .then((result)=> {
+    this.$store.commit('setUser', result.data[0])
+    this.$store.commit('setToken', result.data[1])
+    this.$router.push('/accueil')
+  })
+  .catch(error => {
+    console.log(error.data)
+  })
+},
   },
 }
 </script>

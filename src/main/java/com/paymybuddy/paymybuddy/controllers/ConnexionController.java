@@ -26,6 +26,7 @@ public class ConnexionController {
 
     @RequestMapping("/{id}")
     public List<UtilisateurDTO> getRelation(@PathVariable("id") Integer idUtilisateur) {
+        log.info("Voici la liste des connexions correspondantes a cet utilisateur: " + idUtilisateur+" "+ iConnexionService.getConnexionById(idUtilisateur));
         return iConnexionService.getConnexionById(idUtilisateur);
     }
     @PostMapping("/nouvelleConnexion")

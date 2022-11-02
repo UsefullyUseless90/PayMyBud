@@ -44,7 +44,7 @@ export default{
   },
     
     beforeMount(){
-        axios.get("http://localhost:8080/paymybuddy/login",
+        axios.post("http://localhost:8080/paymybuddy/login/signin",
         {
           headers: {
             user: JSON.stringify(this.user),

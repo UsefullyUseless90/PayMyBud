@@ -3,7 +3,7 @@
     <table class="table">
       <tbody v-for="(transaction, index) in transactions" :key="index">
         <tr>
-          <td>{{ transaction.embeddedTransaction }}</td>
+          <td>{{ transaction.embeddedTransaction.date }}</td>
           <td>{{ transaction.description }}</td>
           <td>{{ transaction.montant }}</td>
         </tr>
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import TransactionsDataServices from "../../services/TransactionsDataServices";
 
 export default {
@@ -22,6 +23,10 @@ export default {
       transactions:[],
     };
   },
+  computed:{
+      user(){ return this.$store.state.user },
+      token(){ return this.$store.state.token },
+    },
   methods: {
     retrieveTransactions() {
       TransactionsDataServices.getDestinataire()
@@ -32,6 +37,12 @@ export default {
           alert(e);
         });
     },
+    logout(){
+        this.$store.commit('setUser'      , {} )
+        this.$store.commit('setToken'     , '' )
+        this.$router.push('http://localhost:8080/paymybuddy/login/signin')        
+      },
+     
   },
   mounted() {
     this.retrieveTransactions();

@@ -1,9 +1,11 @@
 package com.paymybuddy.paymybuddy.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,6 +37,8 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+
+
     /**
      *
      * @param http
@@ -46,18 +50,23 @@ public class SecurityConfig {
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests()
-                .antMatchers("/user/transactions/").authenticated()
-                .antMatchers("/transactions/{id}").authenticated()
-                .antMatchers("/transactions/nouvelleTransaction").authenticated()
+                .antMatchers("user/transactions/").authenticated()
+                .antMatchers("user/transactions/{id}").authenticated()
+                .antMatchers("user/transactions/nouvelleTransaction").authenticated()
                 .antMatchers("/utilisateurs/").authenticated()
-                .antMatchers("/connexions/{id}").authenticated()
-                .antMatchers("/connexions/nouvelleConnexion").authenticated()
-                .antMatchers("/login/signing").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("user/connexions/{id}").authenticated()
+                .antMatchers("user/connexions/nouvelleConnexion").authenticated()
+                .antMatchers("/login/signin").permitAll()
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
-                .failureUrl("/login/signing")
+                .failureUrl("/login/authenticate")
                 .defaultSuccessUrl("/user/accueil")
+                .and()
+                .logout()
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
                 .and()
                 .cors().and()
                 .csrf().disable().authorizeHttpRequests()
@@ -73,12 +82,14 @@ public class SecurityConfig {
         }
     }
 
+
     @Bean
     public UserDetailsService userDetailsService(){
         List<UserDetails>userDetailsList =new ArrayList<>();
         userDetailsList.add(User.withUsername("user").password(passwordEncoder().encode("password")).roles("Utilisateur").build());
         return new InMemoryUserDetailsManager(userDetailsList);
     }
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

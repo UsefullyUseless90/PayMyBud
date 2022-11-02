@@ -17,17 +17,51 @@
   </div>
 
 </template>
+
 <script>
   import ConnexionDemandeVue from '@/components/Connexions/ConnexionDemande.vue';
   import ConnexionsListeVue from '@/components/Connexions/ConnexionsListe.vue';
   import ConnexionTableVue from '@/components/Connexions/ConnexionTable.vue';
-export default{
+  import { mapGetters } from 'vuex';
+  import axios from 'axios';
+  
+
+  export default{
   name:"connexion-item",
   components:{
       ConnexionDemandeVue,
       ConnexionsListeVue,
-      ConnexionTableVue,
+      ConnexionTableVue
+    },
+
+    computed:{
+      ...mapGetters(["isLoggedIn"]),
+    },
+  mounted() {
+    if (!this.currentUser) {
+      this.$router.push('');
     }
+  },
+
+  beforeMount(){
+        axios.post("http://localhost:8080/paymybuddy/login/signin",
+        {
+          headers: {
+            user: JSON.stringify(this.user),
+            Authorization: 'Bearer ' + this.token
+          }
+        })
+          .then(
+              (result) => {
+                this.message = result.data;
+              }
+          )
+          .catch(
+            error => {
+              console.log(error.data)
+            }
+          )
+      },
   }
 
 

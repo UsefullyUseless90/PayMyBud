@@ -38,6 +38,10 @@ export default {
       ConnexionDataServices,
     };
   },
+  computed:{
+      user(){ return this.$store.state.user },
+      token(){ return this.$store.state.token },
+    },
   methods:{
     submitDemande() {
       ConnexionDataServices.create(this.connexionDTO)
@@ -51,7 +55,31 @@ export default {
     },
     myFunction() {
       location.reload();
-    }
+    },
+    logout(){
+        this.$store.commit('setUser'      , {} )
+        this.$store.commit('setToken'     , '' )
+        this.$router.push('http://localhost:8080/paymybuddy/login/signin')        
+      },
+      beforeMount(){
+        axios.get('/internal',
+        {
+          headers: {
+            user: JSON.stringify(this.user),
+            Authorization: 'Bearer ' + this.token
+          }
+        })
+          .then(
+              (result) => {
+                this.message = result.data;
+              }
+          )
+          .catch(
+            error => {
+              console.log(error.data)
+            }
+          )
+      },
   }
 };
 </script>

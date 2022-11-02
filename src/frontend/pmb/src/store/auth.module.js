@@ -32,14 +32,16 @@ const mutations = {
   },
 };
 
+
 const actions = {
   userSignIn({ commit }, payload) {
     const data = {
       username: payload.username,
       password: payload.password,
     };
+   
     commit('setLoading', true);
-    axios.post('http://localhost:8091/login', data)
+    axios.post('http://localhost:8080/login/signin', data)
       .then(() => {
         commit('setAuth', true);
         commit('setLoading', false);

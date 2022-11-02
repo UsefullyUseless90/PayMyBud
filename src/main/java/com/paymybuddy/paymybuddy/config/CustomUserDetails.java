@@ -1,6 +1,5 @@
 package com.paymybuddy.paymybuddy.config;
 
-import com.paymybuddy.paymybuddy.models.dao.UtilisateurDAO;
 import com.paymybuddy.paymybuddy.models.dto.UtilisateurDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -14,10 +13,6 @@ public class CustomUserDetails implements UserDetails {
 
     /** Keep information about app user in local database */
     private UtilisateurDTO appUser;
-
-    public CustomUserDetails() {
-
-    }
 
     public CustomUserDetails(User user, UtilisateurDTO appUser) {
         this.user = user;

@@ -3,18 +3,17 @@
     
   </div>
     <table class="table">
-      <tbody v-for="(connexions, index) in connexions" :key="index">
+      <tbody v-for="(connexion, index) in connexions" :key="index">
         <tr>
-          <td>{{ connexions.idUtilisateur}}</td>
-          <td>{{ connexions.nomPrenom }}</td>
+          <td>{{ connexion.idUtilisateur}}</td>
+          <td>{{ connexion.nomPrenom }}</td>
         </tr>
       </tbody>
     </table>
 
 </template>
 <script>
-import ConnexionDataServices from "../../services/ConnexionDataServices";
-
+import axios from "axios";
 export default {
   name: "connexions-item",
   data() {
@@ -22,9 +21,13 @@ export default {
       connexions: [],
     };
   },
+  computed:{
+      user(){ return this.$store.state.user },
+      token(){ return this.$store.state.token },
+    },
   methods: {
     retrieveConnexions() {
-      ConnexionDataServices.get()
+      axios.get("http://localhost:8080/paymybuddy/user/connexions/1")
         .then((response) => {
           this.connexions = response.data;
         })
@@ -32,26 +35,17 @@ export default {
           alert(e);
         });
     },
-  },
-  onConnexionChange(event) {
-    const src = event.target.id; // This should give you the id of the select that has fired the event
-    const index = parseInt(src.replace("connexions.id", ""));
-    this.requestItems[index].connexions.id = event.target.value;
-    console.log(this.requestItems[index].connexions.id);
-  },
-  retrieveConnexions() {
-    ConnexionDataServices.get()
-      .then((response) => {
-        this.connexions = response.data;
-      })
-      .catch((e) => {
-        alert(e);
-      });
-  },
+  logout(){
+        this.$store.commit('setUser'      , {} )
+        this.$store.commit('setToken'     , '' )
+        this.$router.push('http://localhost:8080/paymybuddy/login/signin')        
+      },
+    },   
   mounted() {
     this.retrieveConnexions();
   },
-};
+}
+
 </script>
 <style>
   table {
