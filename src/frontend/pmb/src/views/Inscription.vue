@@ -36,7 +36,9 @@
           <input v-model="utilisateurDAO.motDePasse" type="password" name="motDePasse" id="motDePasse"/>
     </div>        
     <div class="card-footer">
-      <button v-on:click="create()" class="btn btn-primary">Inscription</button>
+      <button v-on:click="create()" class="btn btn-primary">
+      <router-link to="/">Inscription</router-link>
+      </button>
     </div>
   </div>
 </template>

@@ -15,14 +15,20 @@
             <input v-model="utilisateurDTO.motDePasse" type="password" name="motDePasse" id="motDePasse"/>
       </div>        
       <div class="card-footer">
-        <button v-on:click="login()" class="btn btn-primary">Se connecter</button>
+        <button v-on:click="login()" class="btn btn-primary">
+          Se connecter
+        </button>
       </div>
+      <h1>Pas encore membre?</h1>
+      <button class="button1">
+      <router-link to="/inscription">Devenir membre!</router-link>
+      </button>
     </div>
   </template>
 
 <script>
 import axios from 'axios';
-
+import InscriptionVue from './Inscription.vue';
 import { mapMutations } from 'vuex';
 export default {
   name: 'Login',
@@ -31,7 +37,8 @@ export default {
       utilisateurDTO:{
         adresseEmail: "",
         motDePasse:""
-      }  
+      },
+      InscriptionVue,  
     };
   },
 
@@ -44,7 +51,8 @@ export default {
   .then((result)=> {
     this.$store.commit('setUser', result.data[0])
     this.$store.commit('setToken', result.data[1])
-    this.$router.push('/accueil')
+    console.log(result);
+             window.location = "/accueil";
   })
   .catch(error => {
     console.log(error.data)
@@ -79,5 +87,18 @@ button{
   font-size: x-large;
   margin-top: 25px;
   margin-left: 6%;
+}
+.button1 {
+  background-color: blue;
+  color: #fff;
+  height: 50px;
+  width: 250px;
+  border: 1px green;
+  border-radius: 20px / 20px;
+  font-weight: bold;
+  font-size: x-large;
+}
+router-link{
+color: white;
 }
 </style>

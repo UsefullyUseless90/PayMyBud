@@ -1,10 +1,12 @@
 package com.paymybuddy.paymybuddy.services;
 
+import com.paymybuddy.paymybuddy.models.Commissions_pmb;
 import com.paymybuddy.paymybuddy.models.dao.UtilisateurDAO;
 import com.paymybuddy.paymybuddy.models.dto.TransactionDTO;
 import com.paymybuddy.paymybuddy.DataTransferObjects.ObjectMapper;
 import com.paymybuddy.paymybuddy.models.dao.EmbeddedTransaction;
 import com.paymybuddy.paymybuddy.models.dao.TransactionDAO;
+import com.paymybuddy.paymybuddy.repositories.CommissionsRepository;
 import com.paymybuddy.paymybuddy.repositories.TransactionRepository;
 import com.paymybuddy.paymybuddy.repositories.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class TransactionService implements ITransactionService {
@@ -21,6 +24,8 @@ public class TransactionService implements ITransactionService {
     TransactionRepository transactionRepository;
     @Autowired
     UtilisateurRepository utilisateurRepository;
+    @Autowired
+    CommissionsRepository commissionsRepository;
     @Autowired
     TransactionDAO transactionDAO;
     @Autowired
@@ -51,16 +56,19 @@ public class TransactionService implements ITransactionService {
 
         TransactionDAO transactionDAO = new TransactionDAO(transactionDTO.getDescription(), transactionDTO.getMontant(), transactionDTO.getDate(), emetteurDAO, destinataireDAO);
 
+        Commissions_pmb cPmb = new Commissions_pmb();
+
         if(transactionDTO.getMontant() > emetteurDAO.getFondsDisponibles()){
             throw new Exception("Vous ne disposez pas de suffisamment de fonds pour effectuer cette transaction");
         }else {
             //Calcul commission//
-
-
+            cPmb.setMontant(transactionDTO.getMontant()*0.005);
+            cPmb.setNumeroTransaction((new Random().nextInt()));
             emetteurDAO.setFondsDisponibles(emetteurDAO.getFondsDisponibles() - transactionDTO.getMontant());
             destinataireDAO.setFondsDisponibles(destinataireDAO.getFondsDisponibles() + transactionDTO.getMontant());
         }
         transactionDAO = transactionRepository.save(transactionDAO);
+        cPmb = commissionsRepository.save(cPmb);
 
         return new TransactionDTO(transactionDAO);
     }
