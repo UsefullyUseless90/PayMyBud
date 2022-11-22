@@ -11,7 +11,6 @@ public class CustomUserDetails implements UserDetails {
 
     private User user;
 
-    /** Keep information about app user in local database */
     private UtilisateurDTO appUser;
 
     public CustomUserDetails(User user, UtilisateurDTO appUser) {

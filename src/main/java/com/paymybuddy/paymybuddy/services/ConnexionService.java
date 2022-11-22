@@ -1,10 +1,8 @@
 package com.paymybuddy.paymybuddy.services;
 
 import com.paymybuddy.paymybuddy.models.dao.ConnexionDAO;
-import com.paymybuddy.paymybuddy.models.dao.TransactionDAO;
 import com.paymybuddy.paymybuddy.models.dao.UtilisateurDAO;
 import com.paymybuddy.paymybuddy.models.dto.ConnexionDTO;
-import com.paymybuddy.paymybuddy.models.dto.TransactionDTO;
 import com.paymybuddy.paymybuddy.models.dto.UtilisateurDTO;
 import com.paymybuddy.paymybuddy.repositories.ConnexionRepository;
 import com.paymybuddy.paymybuddy.repositories.UtilisateurRepository;
@@ -16,7 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @Service
-class ConnexionService implements IConnexionService {
+public class ConnexionService implements IConnexionService {
 
     @Autowired
     private ConnexionRepository connexionRepository;
@@ -24,6 +22,10 @@ class ConnexionService implements IConnexionService {
 
     @Autowired
     private UtilisateurRepository utilisateurRepository;
+
+
+    public ConnexionService(UtilisateurRepository repo, ConnexionRepository cRepo) {
+    }
 
     public Iterable<ConnexionDAO> getConnexions(){
         return connexionRepository.findAll();
@@ -50,9 +52,12 @@ class ConnexionService implements IConnexionService {
     }
 
     @Override
-    public ConnexionDTO creationConnexion(ConnexionDTO connexionDTO) {
+    public ConnexionDTO creationConnexion(ConnexionDTO connexionDTO, Integer idUtilisateur) {
+
+        UtilisateurDAO receveur = utilisateurRepository.findById(idUtilisateur).orElse(null);
+
         UtilisateurDAO demandeurDAO =  utilisateurRepository.findById(connexionDTO.getDemandeur().getIdUtilisateur()).orElse(null);
-        UtilisateurDAO receveurDAO =  utilisateurRepository.findById(connexionDTO.getReceveur().getIdUtilisateur()).orElse(null);
+        UtilisateurDAO receveurDAO =  receveur;
 
         ConnexionDAO connexionDAO = new ConnexionDAO(demandeurDAO,receveurDAO);
 

@@ -2,8 +2,10 @@ package com.paymybuddy.paymybuddy.controllers;
 
 import com.paymybuddy.paymybuddy.config.CustomUserDetails;
 import com.paymybuddy.paymybuddy.config.JwtManager;
+import com.paymybuddy.paymybuddy.models.dto.IdentificationDTO;
 import com.paymybuddy.paymybuddy.models.dto.UtilisateurDTO;
 import com.paymybuddy.paymybuddy.repositories.UtilisateurRepository;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 
 
-@CrossOrigin
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/login")
+@RequiredArgsConstructor
 public class AuthController{
 
     @Autowired
@@ -34,22 +36,13 @@ public class AuthController{
     @Autowired
     UserDetailsService userDetailsService;
 
-/*
-    @PostMapping(path = "/signin", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Object[] login(@RequestBody UtilisateurDTO user){
+    @Autowired
+    UtilisateurRepository repo;
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getAdresseEmail(), user.getMotDePasse()));
-
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-
-        return new Object[]{ userDetails.getAppUser(), jwt.generateToken(userDetails)};
-
-    }
-*/
     private static final Logger log = LogManager.getLogger(AuthController.class);
 
-    @RequestMapping(value = "/signin", method = RequestMethod.POST)
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @RequestMapping(value = "/login/signin", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody UtilisateurDTO authenticationRequest) throws Exception {
 
         authenticate(authenticationRequest.getAdresseEmail(), authenticationRequest.getMotDePasse());
@@ -57,11 +50,17 @@ public class AuthController{
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(authenticationRequest.getAdresseEmail());
 
+        final UtilisateurDTO utilisateurDTO = repo.findByAdresseEmail(authenticationRequest.getAdresseEmail());
+        Integer idUtilisateur = utilisateurDTO.getIdUtilisateur();
+        String id = idUtilisateur.toString();
+
         final String token = jwt.generateToken(userDetails);
 
         log.info("Voici le token généré:" + token);
+        log.info(idUtilisateur);
 
-        return ResponseEntity.ok(token);
+
+        return ResponseEntity.ok(new IdentificationDTO(id, token));
     }
 
     private void authenticate(String username, String password) throws Exception {

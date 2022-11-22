@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,8 +30,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(userName);
         }else {
             List<GrantedAuthority> authorities = getUserAuthority(user.roles);
-            return new CustomUserDetails(new org.springframework.security.core.userdetails.User( user.getNomPrenom(), user.getMotDePasse(),
-                    user.actif, true, true, true, authorities), user);
+            return new CustomUserDetails(new org.springframework.security.core.userdetails.User( user.getNomPrenom(), new BCryptPasswordEncoder().encode(user.getMotDePasse()),
+                    true, true, true, true, authorities), user);
         }
     }
 

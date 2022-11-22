@@ -40,8 +40,8 @@ public class UtilisateurDTO implements Serializable {
         this.nomPrenom = utilisateurDAO.getNom().concat(" ").concat(utilisateurDAO.getPrenom());
         this.motDePasse = utilisateurDAO.getMotDePasse();
         this.actif = actif;
-        if(roles!=null)
-            this.roles = new ArrayList<>(roles);
+        this.roles = new ArrayList<>();
+        this.roles.add(RoleUtilisateurs.USER);
     }
 
 }

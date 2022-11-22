@@ -13,7 +13,4 @@ public interface IUtilisateurService {
 
     UtilisateurDAO saveUtilisateur(UtilisateurDAO utilisateurDAO);
 
-    /*
-    List<Utilisateur> utilisateurMaj(Utilisateur utilisateur);
-     */
 }

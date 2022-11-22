@@ -46,10 +46,10 @@ public class TransactionController {
         Optional<TransactionDAO> transaction = iTransactionService.getEchangeParDestinataire(idUtilisateur);
         return transaction;
     }
-    @PostMapping("/nouvelleTransaction")
-    public ResponseEntity<TransactionDTO> creationTransaction(@RequestBody TransactionDTO transactionDTO) throws Exception {
+    @PostMapping("/nouvelleTransaction/{id}")
+    public ResponseEntity<TransactionDTO> creationTransaction(@RequestBody TransactionDTO transactionDTO,@PathVariable ("id") Integer idUtilisateur) throws Exception {
         log.info("Création d'une nouvelle transaction, veuillez patienter...");
-        iTransactionService.creationTransaction(transactionDTO);
+        iTransactionService.creationTransaction(transactionDTO, idUtilisateur);
         ResponseEntity<TransactionDTO> creation = ResponseEntity.status(HttpStatus.CREATED).body(transactionDTO);
         log.info("Une nouvelle transaction a été crée" + creation);
 

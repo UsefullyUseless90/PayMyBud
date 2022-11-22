@@ -13,5 +13,5 @@ public interface IConnexionService {
 
     List<UtilisateurDTO> getConnexionById(Integer idUtilisateur);
 
-    ConnexionDTO creationConnexion(ConnexionDTO connexionDTO);
+    ConnexionDTO creationConnexion(ConnexionDTO connexionDTO, Integer idUtilisateur);
 }

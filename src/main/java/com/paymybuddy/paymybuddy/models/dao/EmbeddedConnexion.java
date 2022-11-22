@@ -17,11 +17,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class EmbeddedConnexion implements Serializable {
 
-   /* public EmbeddedConnexion() {
-        this.receveur = receveur;
-        this.demandeur = demandeur;
-    }
-    */
     @ManyToOne
     @JoinColumn
     private UtilisateurDAO receveur;

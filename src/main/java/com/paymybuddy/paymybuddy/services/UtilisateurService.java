@@ -36,20 +36,5 @@ public class UtilisateurService implements IUtilisateurService {
         utilisateurDAO = utilisateurRepository.save(utilisateurDAO);
         return utilisateurDAO;
     }
-   /* List<Utilisateur> utilisateurMaj(Utilisateur utilisateur){
-        // Creates a list and add to it the persons
-        Iterable<Utilisateur> personList = this.getTousLesUtilisateurs();
 
-        for (int i = 0; i < personList.size(); i++) {
-            Utilisateur utilisateur = personList.get(i);
-            // In case of any match the value is replaced by a new one
-            if (p.getLastName().equals(person.getLastName()) && p.getFirstName().equals(person.getFirstName())) {
-                personList.set(i, person);
-                break;
-            }
-        }
-        return utilisateurList;
-    }
-
-    */
 }

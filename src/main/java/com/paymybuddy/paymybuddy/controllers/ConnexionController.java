@@ -29,10 +29,10 @@ public class ConnexionController {
         log.info("Voici la liste des connexions correspondantes a cet utilisateur: " + idUtilisateur+" "+ iConnexionService.getConnexionById(idUtilisateur));
         return iConnexionService.getConnexionById(idUtilisateur);
     }
-    @PostMapping("/nouvelleConnexion")
-    public ResponseEntity<?> creationConnexion(@RequestBody ConnexionDTO connexionDTO) throws IOException, JSONException {
+    @PostMapping("/nouvelleConnexion/{id}")
+    public ResponseEntity<?> creationConnexion(@RequestBody ConnexionDTO connexionDTO,@PathVariable("id") Integer idUtilisateur) throws IOException, JSONException {
         log.info("Création d'une nouvelle connexion, veuillez patienter...");
-        iConnexionService.creationConnexion(connexionDTO);
+        iConnexionService.creationConnexion(connexionDTO,idUtilisateur);
         ResponseEntity<?> creation = ResponseEntity.status(HttpStatus.CREATED).body(connexionDTO);
         log.info("Une nouvelle connexion a été crée" + creation);
 
