@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UtilisateurDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">paymybuddy</a> &gt; <a href="index.source.html" class="el_package">com.paymybuddy.paymybuddy.models.dao</a> &gt; <span class="el_source">UtilisateurDAO.java</span></div><h1>UtilisateurDAO.java</h1><pre class="source lang-java linenums">package com.paymybuddy.paymybuddy.models.dao;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
+import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.springframework.stereotype.Component;
+
+import javax.persistence.*;
+import java.util.*;
+
+@Component
+@Table(name = &quot;utilisateurs&quot;)
+@Entity
+@Getter
+<span class="pc bpc" id="L17" title="1 of 2 branches missed.">@Setter</span>
+<span class="fc" id="L18">@NoArgsConstructor</span>
+public class UtilisateurDAO {
+    @Id
+    @Column(name = &quot;id_utilisateur&quot;)
+    private Integer idUtilisateur;
+    @Column(name = &quot;nom&quot;)
+<span class="fc" id="L24">    private String nom;</span>
+    @Column(name = &quot;prenom&quot;)
+<span class="fc" id="L26">    private String prenom;</span>
+    @Column(name = &quot;adresse_email&quot;)
+<span class="fc" id="L28">    private String adresseEmail;</span>
+    @Column(name = &quot;date_de_naissance&quot;)
+<span class="fc" id="L30">    private Date dateDeNaissance;</span>
+    @Column(name = &quot;fonds_disponibles&quot;)
+<span class="fc" id="L32">    private double fondsDisponibles;</span>
+    @NotNull
+    @Column(name = &quot;mot_de_passe&quot;)
+<span class="fc" id="L35">    private String motDePasse;</span>
+
+    @OneToMany( mappedBy = &quot;embeddedTransaction.emetteur&quot;, cascade=CascadeType.ALL)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JsonIgnore
+<span class="nc" id="L40">    private List&lt;TransactionDAO&gt; transactionDAOS;</span>
+
+
+<span class="pc" id="L43">   @OneToMany(mappedBy = &quot;embeddedConnexion.receveur&quot;, cascade=CascadeType.ALL)</span>
+   @JsonIgnore
+<span class="fc" id="L45">   Set&lt;ConnexionDAO&gt; connexionDAOSet = new HashSet&lt;&gt;();</span>
+
+    public int getIdUtilisateur() {
+<span class="fc" id="L48">        return idUtilisateur;</span>
+    }
+
+<span class="nc" id="L51">    public UtilisateurDAO(int idUtilisateur, String nom, String prenom, String motDePasse, String adresseEmail, Date dateDeNaissance, double fondsDisponibles) {</span>
+
+<span class="nc" id="L53">        this.idUtilisateur = idUtilisateur;</span>
+<span class="nc" id="L54">        this.nom = nom;</span>
+<span class="nc" id="L55">        this.prenom = prenom;</span>
+<span class="nc" id="L56">        this.adresseEmail = adresseEmail;</span>
+<span class="nc" id="L57">        this.dateDeNaissance = dateDeNaissance;</span>
+<span class="nc" id="L58">        this.fondsDisponibles = fondsDisponibles;</span>
+<span class="nc" id="L59">        this.motDePasse = motDePasse;</span>
+
+<span class="nc" id="L61">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConnexionService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">paymybuddy</a> &gt; <a href="index.source.html" class="el_package">com.paymybuddy.paymybuddy.services</a> &gt; <span class="el_source">ConnexionService.java</span></div><h1>ConnexionService.java</h1><pre class="source lang-java linenums">package com.paymybuddy.paymybuddy.services;
+
+import com.paymybuddy.paymybuddy.models.dao.ConnexionDAO;
+import com.paymybuddy.paymybuddy.models.dao.UtilisateurDAO;
+import com.paymybuddy.paymybuddy.models.dto.ConnexionDTO;
+import com.paymybuddy.paymybuddy.models.dto.UtilisateurDTO;
+import com.paymybuddy.paymybuddy.repositories.ConnexionRepository;
+import com.paymybuddy.paymybuddy.repositories.UtilisateurRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+@Service
+public class ConnexionService implements IConnexionService {
+
+    @Autowired
+    private ConnexionRepository connexionRepository;
+
+
+    @Autowired
+    private UtilisateurRepository utilisateurRepository;
+
+
+<span class="fc" id="L27">    public ConnexionService(UtilisateurRepository repo, ConnexionRepository cRepo) {</span>
+<span class="fc" id="L28">    }</span>
+
+    public Iterable&lt;ConnexionDAO&gt; getConnexions(){
+<span class="fc" id="L31">        return connexionRepository.findAll();</span>
+    }
+
+    public List&lt;UtilisateurDTO&gt; getConnexionById(Integer idUtilisateur){
+<span class="fc" id="L35">        UtilisateurDAO utilisateurDAO = utilisateurRepository.findById(idUtilisateur).orElse(null);</span>
+
+<span class="fc" id="L37">        List&lt;UtilisateurDTO&gt; listeConnexion = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L39">        Iterator&lt;ConnexionDAO&gt; connexion = utilisateurDAO.getConnexionDAOSet().iterator();</span>
+
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        while(connexion.hasNext()) {</span>
+<span class="fc" id="L42">            ConnexionDAO connexionDAO = connexion.next();</span>
+
+<span class="fc" id="L44">            UtilisateurDTO nouvelUtilisateurDTO = new UtilisateurDTO(connexionDAO.getEmbeddedConnexion().getDemandeur());</span>
+
+<span class="fc" id="L46">            listeConnexion.add(nouvelUtilisateurDTO);</span>
+
+<span class="fc" id="L48">        }</span>
+
+
+<span class="fc" id="L51">        return listeConnexion;</span>
+    }
+
+    @Override
+    public ConnexionDTO creationConnexion(ConnexionDTO connexionDTO, Integer idUtilisateur) {
+
+<span class="fc" id="L57">        UtilisateurDAO receveur = utilisateurRepository.findById(idUtilisateur).orElse(null);</span>
+
+<span class="fc" id="L59">        UtilisateurDAO demandeurDAO =  utilisateurRepository.findById(connexionDTO.getDemandeur().getIdUtilisateur()).orElse(null);</span>
+<span class="fc" id="L60">        UtilisateurDAO receveurDAO =  receveur;</span>
+
+<span class="fc" id="L62">        ConnexionDAO connexionDAO = new ConnexionDAO(demandeurDAO,receveurDAO);</span>
+
+<span class="fc" id="L64">        connexionDAO = connexionRepository.save(connexionDAO);</span>
+
+<span class="fc" id="L66">        return new ConnexionDTO(connexionDAO);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

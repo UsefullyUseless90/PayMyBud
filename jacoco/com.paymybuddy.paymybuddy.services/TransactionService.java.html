@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransactionService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">paymybuddy</a> &gt; <a href="index.source.html" class="el_package">com.paymybuddy.paymybuddy.services</a> &gt; <span class="el_source">TransactionService.java</span></div><h1>TransactionService.java</h1><pre class="source lang-java linenums">package com.paymybuddy.paymybuddy.services;
+
+import com.paymybuddy.paymybuddy.models.Commissions_pmb;
+import com.paymybuddy.paymybuddy.models.dao.EmbeddedTransaction;
+import com.paymybuddy.paymybuddy.models.dao.TransactionDAO;
+import com.paymybuddy.paymybuddy.models.dao.UtilisateurDAO;
+import com.paymybuddy.paymybuddy.models.dto.TransactionDTO;
+import com.paymybuddy.paymybuddy.repositories.CommissionsRepository;
+import com.paymybuddy.paymybuddy.repositories.TransactionRepository;
+import com.paymybuddy.paymybuddy.repositories.UtilisateurRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+
+@Service
+<span class="fc" id="L20">public class TransactionService implements ITransactionService {</span>
+
+    @Autowired
+    TransactionRepository transactionRepository;
+    @Autowired
+    UtilisateurRepository utilisateurRepository;
+    @Autowired
+    CommissionsRepository commissionsRepository;
+    @Autowired
+    TransactionDAO transactionDAO;
+    @Autowired
+    UtilisateurDAO utilisateurDAO;
+    @Autowired
+    EmbeddedTransaction embeddedTransaction;
+
+
+    public Iterable&lt;TransactionDAO&gt; getTransactions(){
+<span class="fc" id="L37">        Iterable&lt;TransactionDAO&gt; transactions = transactionRepository.findAll();</span>
+<span class="fc" id="L38">        return transactions;</span>
+    }
+    public Optional&lt;TransactionDAO&gt; getEchangeParEmetteur(Integer idUtilisateur){
+<span class="nc" id="L41">        Optional&lt;TransactionDAO&gt; echange = transactionRepository.findById(transactionDAO.getEmbeddedTransaction().getEmetteur().getIdUtilisateur());</span>
+<span class="nc" id="L42">        return echange;</span>
+    }
+    public Optional&lt;TransactionDAO&gt; getEchangeParDestinataire(Integer idUtilisateur){
+<span class="nc" id="L45">        Optional&lt;TransactionDAO&gt; echange = transactionRepository.findById(transactionDAO.getEmbeddedTransaction().getDestinataire().getIdUtilisateur());</span>
+<span class="nc" id="L46">        return echange;</span>
+    }
+
+    @Override
+    public TransactionDTO creationTransaction(TransactionDTO transactionDTO, Integer idUtilisateur) throws Exception {
+
+<span class="fc" id="L52">        UtilisateurDAO emetteur = utilisateurRepository.findById(idUtilisateur).orElse(null);</span>
+
+<span class="fc" id="L54">        UtilisateurDAO emetteurDAO =  emetteur;</span>
+<span class="fc" id="L55">        UtilisateurDAO destinataireDAO =  utilisateurRepository.findById(transactionDTO.getDestinataire().getIdUtilisateur()).orElse(null);</span>
+
+<span class="fc" id="L57">        TransactionDAO transactionDAO = new TransactionDAO(transactionDTO.getDescription(), transactionDTO.getMontant(), transactionDTO.getDate(), emetteurDAO, destinataireDAO);</span>
+
+<span class="fc" id="L59">        Commissions_pmb cPmb = new Commissions_pmb();</span>
+
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if(transactionDTO.getMontant() &gt; emetteurDAO.getFondsDisponibles()){</span>
+<span class="fc" id="L62">            throw new Exception(&quot;Vous ne disposez pas de suffisamment de fonds pour effectuer cette transaction&quot;);</span>
+        }else {
+            //Calcul commission//
+<span class="fc" id="L65">            cPmb.setMontant(transactionDTO.getMontant()*0.005);</span>
+<span class="fc" id="L66">            cPmb.setNumeroTransaction((new Random().nextInt()));</span>
+<span class="fc" id="L67">            emetteurDAO.setFondsDisponibles(emetteurDAO.getFondsDisponibles() - transactionDTO.getMontant());</span>
+<span class="fc" id="L68">            destinataireDAO.setFondsDisponibles(destinataireDAO.getFondsDisponibles() + transactionDTO.getMontant());</span>
+        }
+<span class="fc" id="L70">        transactionDAO = transactionRepository.save(transactionDAO);</span>
+<span class="fc" id="L71">        cPmb = commissionsRepository.save(cPmb);</span>
+
+<span class="fc" id="L73">        return new TransactionDTO(transactionDAO);</span>
+    }
+
+    public List&lt;TransactionDAO&gt; getTransactionsById(Integer idUtilisateur){
+<span class="fc" id="L77">        List&lt;TransactionDAO&gt; listeTransactionDAO = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L78">        UtilisateurDAO utilisateurDAO = utilisateurRepository.findById(idUtilisateur).orElse(null);</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if(utilisateurDAO != null) {</span>
+<span class="fc" id="L80">            listeTransactionDAO = transactionRepository.getMyTransactions(utilisateurDAO);</span>
+        }
+<span class="fc" id="L82">        return listeTransactionDAO;</span>
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

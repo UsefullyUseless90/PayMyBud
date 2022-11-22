@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UtilisateurController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">paymybuddy</a> &gt; <a href="index.source.html" class="el_package">com.paymybuddy.paymybuddy.controllers</a> &gt; <span class="el_source">UtilisateurController.java</span></div><h1>UtilisateurController.java</h1><pre class="source lang-java linenums">package com.paymybuddy.paymybuddy.controllers;
+
+import com.paymybuddy.paymybuddy.models.dao.UtilisateurDAO;
+import com.paymybuddy.paymybuddy.repositories.UtilisateurRepository;
+import com.paymybuddy.paymybuddy.services.IUtilisateurService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.json.JSONException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.Optional;
+
+@CrossOrigin(origins = &quot;*&quot;, maxAge = 3600)
+@RestController
+<span class="fc" id="L19">public class UtilisateurController {</span>
+
+<span class="fc" id="L21">    private static final Logger log = LogManager.getLogger(UtilisateurController.class);</span>
+
+    @Autowired
+    IUtilisateurService iUtilisateurService;
+    @Autowired
+    UtilisateurRepository repo;
+
+    @RequestMapping(&quot;/user/utilisateurs&quot;)
+    public ResponseEntity&lt;Iterable&lt;UtilisateurDAO&gt;&gt;getUtilisateurs(){
+<span class="fc" id="L30">        log.info(&quot;Recherche en cours, veuillez patienter...&quot;);</span>
+<span class="fc" id="L31">        log.info(&quot;Voici une liste de l'ensemble des utilisateurs:&quot; + iUtilisateurService.getTousLesUtilisateurs());</span>
+<span class="fc" id="L32">        Iterable&lt;UtilisateurDAO&gt; utilisateurs = iUtilisateurService.getTousLesUtilisateurs();</span>
+<span class="fc" id="L33">        ResponseEntity&lt;Iterable&lt;UtilisateurDAO&gt;&gt; listeUtilisateurs = ResponseEntity.status(HttpStatus.OK).body(utilisateurs);</span>
+<span class="fc" id="L34">        return listeUtilisateurs;</span>
+    }
+    @RequestMapping(value = &quot;/utilisateur/{id}&quot;)
+    public ResponseEntity&lt;Optional&lt;UtilisateurDAO&gt;&gt;getUtilisateurParIdentifiant(@PathVariable(&quot;id&quot;) Integer idUtilisateur){
+<span class="fc" id="L38">        log.info(&quot;Recherche en cours, veuillez patienter...&quot;);</span>
+<span class="fc" id="L39">        log.info(&quot;Voici le resultat de votre demande:&quot; + repo.findById(idUtilisateur));</span>
+<span class="fc" id="L40">        Optional&lt;UtilisateurDAO&gt; id = repo.findById(idUtilisateur);</span>
+<span class="fc" id="L41">        ResponseEntity&lt;Optional&lt;UtilisateurDAO&gt;&gt;identifiantUtilisateur = ResponseEntity.status(HttpStatus.OK).body(id);</span>
+<span class="fc" id="L42">        return identifiantUtilisateur;</span>
+    }
+    @PostMapping
+    @RequestMapping(&quot;/inscription&quot;)
+    public ResponseEntity&lt;UtilisateurDAO&gt; saveUtilisateur(@RequestBody UtilisateurDAO utilisateurDAO) throws IOException, JSONException {
+<span class="fc" id="L47">        log.info(&quot;Création du nouvel utilisateur, veuillez patienter...&quot;);</span>
+<span class="fc" id="L48">        iUtilisateurService.saveUtilisateur(utilisateurDAO);</span>
+<span class="fc" id="L49">        ResponseEntity&lt;UtilisateurDAO&gt; creation = ResponseEntity.status(HttpStatus.CREATED).body(utilisateurDAO);</span>
+<span class="fc" id="L50">        log.info(&quot;Un nouvel utilisateur a été crée&quot; + creation);</span>
+<span class="fc" id="L51">        return creation;</span>
+    }
+    @RequestMapping(&quot;/user/accueil&quot;)
+    public String messageDeBienvenue(){
+<span class="fc" id="L55">        log.info(&quot;Login success!&quot;);</span>
+<span class="fc" id="L56">        return &quot;Bienvenue chez PayMyBuddy&quot;;</span>
+    }
+    @PutMapping
+    @RequestMapping(&quot;/user/edit/{id}&quot;)
+    public ResponseEntity&lt;?&gt; updatePerson(@RequestBody UtilisateurDAO utilisateur, @PathVariable(&quot;id&quot;) Integer idUtilisateur) throws IOException, JSONException {
+<span class="fc" id="L61">        log.info(&quot;Checking, please wait...&quot;);</span>
+<span class="fc" id="L62">        Optional&lt;UtilisateurDAO&gt; updatedUtilisateur = repo.findById(idUtilisateur);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        if(updatedUtilisateur.isPresent()){</span>
+<span class="fc" id="L64">            UtilisateurDAO update = updatedUtilisateur.get();</span>
+<span class="fc" id="L65">            update.setNom(utilisateur.getNom());</span>
+<span class="fc" id="L66">            update.setPrenom(utilisateur.getPrenom());</span>
+<span class="fc" id="L67">            update.setAdresseEmail(utilisateur.getAdresseEmail());</span>
+<span class="fc" id="L68">            repo.save(update);</span>
+        }
+<span class="fc" id="L70">        log.info(&quot;Person updated!&quot; + updatedUtilisateur);</span>
+<span class="fc" id="L71">        return new ResponseEntity&lt;&gt;(updatedUtilisateur, HttpStatus.OK);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
