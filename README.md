@@ -59,9 +59,11 @@ Ci-joint un extrait des dependances et leur version issue du package.json<br/>
     "vue-router": "^3.0.3",<br/>
     "vuex": "^3.0.1",<br/>
     "webpack": "^5.75.0"<br/>
+    <br/>
      Diagramme UML <br/>
     <br/>
 ![UML PMB](https://user-images.githubusercontent.com/84840316/203286466-825c2dd8-eaa7-41ff-bbf9-fd172434689b.jpg)
     <br/>
     MPD<br/>
+    <br/>
 ![MPD](https://user-images.githubusercontent.com/84840316/203287723-c4dfe729-f926-4f31-af94-4ad26ef1aee8.png)
