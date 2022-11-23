@@ -62,8 +62,9 @@ Ci-joint un extrait des dependances et leur version issue du package.json<br/>
     <br/>
      Diagramme UML <br/>
     <br/>
-![UML PMB](https://user-images.githubusercontent.com/84840316/203286466-825c2dd8-eaa7-41ff-bbf9-fd172434689b.jpg)
+![UML PMB](https://user-images.githubusercontent.com/84840316/203590786-947b59f5-8a4e-492e-aa70-456a36d6c264.jpg)
     <br/>
     MPD<br/>
     <br/>
 ![MPD](https://user-images.githubusercontent.com/84840316/203287723-c4dfe729-f926-4f31-af94-4ad26ef1aee8.png)
+
