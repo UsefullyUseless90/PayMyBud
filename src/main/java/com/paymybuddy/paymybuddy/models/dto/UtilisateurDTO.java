@@ -4,12 +4,10 @@ import com.paymybuddy.paymybuddy.models.RoleUtilisateurs;
 import com.paymybuddy.paymybuddy.models.dao.UtilisateurDAO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 

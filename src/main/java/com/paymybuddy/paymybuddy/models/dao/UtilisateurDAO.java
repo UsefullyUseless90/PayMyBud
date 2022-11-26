@@ -1,6 +1,7 @@
 package com.paymybuddy.paymybuddy.models.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.paymybuddy.paymybuddy.models.CompteBancaire;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
@@ -33,6 +34,10 @@ public class UtilisateurDAO {
     @NotNull
     @Column(name = "mot_de_passe")
     private String motDePasse;
+
+    @OneToMany
+    @JsonIgnore
+    private List<CompteBancaire> banques = new ArrayList<>();
 
     @OneToMany( mappedBy = "embeddedTransaction.emetteur", cascade=CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)

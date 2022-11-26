@@ -10,6 +10,7 @@ import com.paymybuddy.paymybuddy.repositories.TransactionRepository;
 import com.paymybuddy.paymybuddy.repositories.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ public class TransactionService implements ITransactionService {
     }
 
     @Override
+    @Transactional
     public TransactionDTO creationTransaction(TransactionDTO transactionDTO, Integer idUtilisateur) throws Exception {
 
         UtilisateurDAO emetteur = utilisateurRepository.findById(idUtilisateur).orElse(null);
@@ -62,9 +64,9 @@ public class TransactionService implements ITransactionService {
             throw new Exception("Vous ne disposez pas de suffisamment de fonds pour effectuer cette transaction");
         }else {
             //Calcul commission//
-            cPmb.setMontant(transactionDTO.getMontant()*0.005);
+            cPmb.setMontant(transactionDTO.getMontant()*0.5);
             cPmb.setNumeroTransaction((new Random().nextInt()));
-            emetteurDAO.setFondsDisponibles(emetteurDAO.getFondsDisponibles() - transactionDTO.getMontant());
+            emetteurDAO.setFondsDisponibles(emetteurDAO.getFondsDisponibles() - transactionDTO.getMontant() - cPmb.getMontant());
             destinataireDAO.setFondsDisponibles(destinataireDAO.getFondsDisponibles() + transactionDTO.getMontant());
         }
         transactionDAO = transactionRepository.save(transactionDAO);
@@ -72,7 +74,7 @@ public class TransactionService implements ITransactionService {
 
         return new TransactionDTO(transactionDAO);
     }
-
+    @Transactional
     public List<TransactionDAO> getTransactionsById(Integer idUtilisateur){
         List<TransactionDAO> listeTransactionDAO = new ArrayList<>();
         UtilisateurDAO utilisateurDAO = utilisateurRepository.findById(idUtilisateur).orElse(null);

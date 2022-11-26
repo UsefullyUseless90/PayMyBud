@@ -8,6 +8,7 @@ import com.paymybuddy.paymybuddy.repositories.ConnexionRepository;
 import com.paymybuddy.paymybuddy.repositories.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,7 +31,7 @@ public class ConnexionService implements IConnexionService {
     public Iterable<ConnexionDAO> getConnexions(){
         return connexionRepository.findAll();
     }
-
+    @Transactional
     public List<UtilisateurDTO> getConnexionById(Integer idUtilisateur){
         UtilisateurDAO utilisateurDAO = utilisateurRepository.findById(idUtilisateur).orElse(null);
 
@@ -52,6 +53,7 @@ public class ConnexionService implements IConnexionService {
     }
 
     @Override
+    @Transactional
     public ConnexionDTO creationConnexion(ConnexionDTO connexionDTO, Integer idUtilisateur) {
 
         UtilisateurDAO receveur = utilisateurRepository.findById(idUtilisateur).orElse(null);

@@ -34,7 +34,6 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-
     /**
      * @param http
      * @return
@@ -44,7 +43,7 @@ public class SecurityConfig {
     @Bean
     @CrossOrigin(origins = "*", maxAge = 3600)
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+        return http.cors().and().csrf().disable()
                 .authorizeHttpRequests()
                 .antMatchers(HttpMethod.POST, "/login/signin").permitAll()
                 .antMatchers("user/transactions/").authenticated()
@@ -63,46 +62,21 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .and()
-                .cors(Customizer.withDefaults())
-                .csrf().disable().authorizeHttpRequests()
-                .and()
-                .httpBasic(Customizer.withDefaults())
                 .build();
 
     }
-
     /**
      *
      */
     @Configuration
     public class WebConfiguration implements WebMvcConfigurer {
 
-        @Bean
-        public CorsConfigurationSource corsConfigurationSource() {
-                  CorsConfiguration configuration = new CorsConfiguration();
-                  configuration.setAllowedOrigins(Arrays.asList("http://localhost:8081"));
-                  configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
-                  configuration.setAllowCredentials(true);
-                  configuration.setAllowedHeaders(List.of("*"));
-                  final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-                  source.registerCorsConfiguration("/**", configuration);
-                  return source;
-        }
 
         @Bean
         public UserDetailsService userDetailsService() {
             return new CustomUserDetailsService();
         }
 
-        @Bean
-        public DaoAuthenticationProvider authenticationProvider() {
-            DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
-            authProvider.setUserDetailsService(userDetailsService());
-            authProvider.setPasswordEncoder(passwordEncoder());
-
-            return authProvider;
-        }
 
         @Bean
         public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authConfiguration) throws Exception {
@@ -114,16 +88,7 @@ public class SecurityConfig {
             return new BCryptPasswordEncoder();
         }
 
-        public class AppAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-            protected void handle(HttpServletRequest request, HttpServletResponse response,
-                                  Authentication authentication) throws IOException, ServletException {
-            }
-        }
 
-        @Bean
-        public AuthenticationSuccessHandler appAuthenticationSuccessHandler() {
-            return new AppAuthenticationSuccessHandler();
-        }
 
 
     }

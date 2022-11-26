@@ -4,6 +4,7 @@ import com.paymybuddy.paymybuddy.models.dao.UtilisateurDAO;
 import com.paymybuddy.paymybuddy.repositories.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Random;
@@ -25,7 +26,7 @@ public class UtilisateurService implements IUtilisateurService {
         Optional<UtilisateurDAO> id = utilisateurRepository.findById(utilisateurDAO.getIdUtilisateur());
         return id;
     }
-
+    @Transactional
     public UtilisateurDAO saveUtilisateur(UtilisateurDAO utilisateurDAO){
         utilisateurDAO.setIdUtilisateur(new Random().nextInt());
         utilisateurDAO.setNom(utilisateurDAO.getNom());
