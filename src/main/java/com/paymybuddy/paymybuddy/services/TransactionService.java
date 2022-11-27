@@ -64,7 +64,7 @@ public class TransactionService implements ITransactionService {
             throw new Exception("Vous ne disposez pas de suffisamment de fonds pour effectuer cette transaction");
         }else {
             //Calcul commission//
-            cPmb.setMontant(transactionDTO.getMontant()*0.5);
+            cPmb.setMontant(transactionDTO.getMontant()*0.005);
             cPmb.setNumeroTransaction((new Random().nextInt()));
             emetteurDAO.setFondsDisponibles(emetteurDAO.getFondsDisponibles() - transactionDTO.getMontant() - cPmb.getMontant());
             destinataireDAO.setFondsDisponibles(destinataireDAO.getFondsDisponibles() + transactionDTO.getMontant());
